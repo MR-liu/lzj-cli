@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-//https://www.jianshu.com/p/1c5d086c68fa
 const chalk = require('chalk');
 const clear = require('clear');
 const figlet = require('figlet');
@@ -18,10 +17,10 @@ console.log(
   )
 );
 
-// if (files.directoryExists('.git')) {
-//   console.log(chalk.red('Already a git repository!'));
-//   process.exit();
-// }
+if (files.directoryExists('.git')) {
+  console.log(chalk.red('Already a git repository!'));
+  process.exit();
+}
 
 const getGithubToken = async () => {
   //从 config store 获取 token
@@ -29,6 +28,8 @@ const getGithubToken = async () => {
   if(token) {
     return token;
   }
+
+  console.log(token)
 
   // 没找到 token ，使用凭证访问 GitHub 账号
   await github.setGithubCredentials();
@@ -42,6 +43,7 @@ const run = async () => {
   try {
     // 获取并设置认证 Token
     const token = await getGithubToken();
+
     github.githubAuth(token);
 
     // 创建远程仓库
@@ -56,6 +58,7 @@ const run = async () => {
       console.log(chalk.green('All done!'));
     }
   } catch(err) {
+      console.log(err)
       if (err) {
         switch (err.code) {
           case 401:
